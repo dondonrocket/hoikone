@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="mh-full-screen py-5">
+  <div class="container">
+    {% if search %}
+    <div class="d-flex justify-content-between align-items-center flex-column flex-md-row mb-4">
+      <div class="me-3">
+        <p class="mb-3 mb-md-0"> 検索結果：<strong>{{ result_count }}件</strong></p>
+      </div>
+    </div>
+    <div class="row">
+      {% for Nursery in search %}
+      <!-- venue item-->
+      <div class="col-sm-6 col-lg-4 mb-5 hover-animate" data-marker-id="59c0c8e33b1527bfe2abaf92">
+        <div class="card h-100 border-0 shadow">
+          {% if Nursery.feature_image %}
+          <div class="card-img-top overflow-hidden dark-overlay bg-cover"
+            style="background-image: url('{{ Nursery.feature_image }}'); min-height: 200px;">
+          {% else %}
+          <div class="card-img-top overflow-hidden dark-overlay bg-cover"
+            style="background-image: url('{% static 'img/original/sub.jpg' %}'); min-height: 200px;">
+          {% endif %}
+            <a class="tile-link" href="{% url 'hoikone:nursery-info' pk=Nursery.nursery_number %}"></a>
+            <div class="card-img-overlay-bottom z-index-20">
+              <h4 class="text-white text-shadow">{{ Nursery.feature|linebreaks }}</h4>
+            </div>
+            <div class="card-img-overlay-top d-flex justify-content-between align-items-center">
+              <div class="badge badge-transparent badge-pill px-3 py-2">{{ Nursery.type }}</div>
+            </div>
+          </div>
+          <div class="card-body" style="background-color: rgb(228, 241, 220); height: 250px;">
+            <a class="tile-link" href="{% url 'hoikone:nursery-info' pk=Nursery.nursery_number %}"></a>
+            <div class="custom_read-more-gradi">
+              {% if Nursery.description %}
+              <p class="custom_read-more text-sm text-muted mb-3">{{ Nursery.description }}
+              {% else %}
+              <p class="custom_read-more text-sm text-muted mb-3">まだ登録されていません。
+              {% endif %}
+              </p>
+            </div>
+            <p class="text-sm text-muted text-uppercase mb-1 custom_overtext" style="width: 100%;  font-weight:bold; "><a href="#" class="text-dark"><span style="background: linear-gradient(transparent 40%, #ffff66 60%);">{{ Nursery.name }}</span></a></p>
+            <p class="text-sm mb-0 custom_overtext" style="height: 23px;"><a class="me-1" href="#">{{ Nursery.phone_number }}</a>
+              <a class="me-1" href="#">{{ Nursery.address }}</a>
+            </p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <div class="me-3">
+        <p class="mb-3 mb-md-0"> 検索結果：<strong>{{ count }}件</strong></p>
+      </div>
+      <p class="not-found">該当する保育園は見つかりませんでした。キーワードを変えてもう一度検索してみて下さい。</p>
+      <div class="not-found-img" style="background-image:url('{% static 'img/original/user_add_kihon.png' %}')"></div>
+      {% endif %}
+
+      <!-- Pagination -->
+      <nav aria-label="pagination_nav">
+        <ul class="pagination">
+          {% if pagination.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="/hoikone/v1/nursery-list/?page={{pagination.previous_page_number}}"
+              tabindex="-1">前へ</a>
+          </li>
+          {% endif %}
+          {% for n in totalPagelist %}
+          {% if n == current_page_number %}
+          <li class="page-item active"><a class="page-link" href="/hoikone/v1/nursery-list/?page={{n}}">{{n}}</a>
+          </li>
+          {% else %}
+          <li class="page-item"><a class="page-link" href="/hoikone/v1/nursery-list/?page={{n}}">{{n}}</a></li>
+          {% endif %}
+          {% endfor %}
+          {% if pagination.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="/hoikone/v1/nursery-list/?page={{pagination.next_page_number}}">次へ</a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+
+
+    </div>
+</section>
+{% endblock %}
+

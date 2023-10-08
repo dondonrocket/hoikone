@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="mh-full-screen py-5" style="background-color: rgb(228, 241, 220)">
+  <div class="container">
+    {% if errors %}
+    <ul>
+      {% for field, error_msgs in errors.items %}
+      <li>{{ field }}: {{ error_msgs|join:", " }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    <div id="pp">
+      <h3 class="pp-ttl" style="font-weight: normal;">メールを送信しました。</h3>
+    <p style="padding-left: 8px;">確認メールに記載されているリンクをクリックすると、アドレスが変更されます。</p>
+  </div>
+</section>
+
+{% endblock %}

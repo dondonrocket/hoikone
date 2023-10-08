@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<section class="hero-home">
+  <div class="swiper-container hero-slider">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide"
+        style="background-image:url('{% static 'img/original/top1.png' %}')"></div>
+      <div class="swiper-slide"
+        style="background-image:url('{% static 'img/original/top2.png' %}')"></div>
+      <div class="swiper-slide"
+        style="background-image:url('{% static 'img/original/top3.png' %}')"></div>
+      <div class="swiper-slide"
+        style="background-image:url('{% static 'img/original/top4.png' %}')"></div>
+    </div>
+  </div>
+  <div class="container py-6 py-md-7 text-white z-index-20">
+    <div class="row">
+      <div class="col-xl-10">
+        <div class="text-center text-lg-start copy_position">
+          <div class="message_display">
+            <!-- メッセージを表示するテンプレート -->
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+          </div>
+          <img class="copy" src="static/img/original/copy.svg" alt="catchcopy">
+        </div>
+        <div class="search-bar mt-5 p-3 p-lg-1 ps-lg-4">
+          <form action="{% url 'hoikone:nursery-list' %}" method="get">
+            <div class="row">
+              <div class="cl-lg-4 custom_col-lg-4 d-flex align-items-center form-group">
+                <input class="form-control border-0 shadow-0" type="text" name="query"
+                  placeholder="保育内容や地名などを入力">
+              </div>
+              <div class="col-lg-2 d-grid">
+                <button class="btn btn-primary rounded-pill h-100" type="submit">保育園を検索する </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <p class="text-center" style="color: #3d3d3d;">※テスト稼働中です。「テスト」と入力して検索するとテストデータを見ることができます。</p>
+  </div>
+</section>
+<section>
+  <!--スクロールメッセージ-->
+  <div class="box">
+    <svg width="300" height="300" xmlns="http://www.w3.org/2000/svg">
+    <!-- 背景の黄緑の円 -->
+      <circle cx="150" cy="150" r="150" fill="rgb(228, 241, 220)" />
+      <!-- 下半分に被る黄色い線 -->
+      <line x1="22%" y1="20%" x2="78%" y2="20%" stroke="#ffff66" stroke-width="10" />
+      <!-- 中央に配置されるテキスト -->
+      <text x="50%" y="20%" text-anchor="middle" alignment-baseline="middle" fill="#3b3b3b" font-size="16">
+      検索のヒントはこちら
+      </text>
+    </svg>
+    <div class="arrow1">
+      <span></span>
+    </div>
+    <div class="arrow2">
+      <span></span>
+    </div>
+    <p class="scroll_subtext">スクロール</p>
+  </div>
+</section>
+<section class="py-6 custom_py-6">
+  <div class="container custom_container_color">
+    <div class="row mb-5">
+      <div class="col-md-8 custom_col-md-8">
+        <p class="subtitle text-primary custom_subtitle" style="background-image:url('{% static 'img/original/detail-title-bg.png' %}')">おすすめのキーワードはこちら</p>
+      </div>
+    </div>
+    <div class="swiper-container guides-slider mx-n2 pt-3">
+      <!-- Additional required wrapper-->
+      <div class="swiper-wrapper pb-5">
+        <!-- Slides-->
+<!--        <div class="swiper-slide h-auto px-2">
+          <div class="card card-poster gradient-overlay hover-animate mb-4 mb-lg-0"><a class="tile-link"
+            href={% url 'hoikone:nursery-list' %}></a><img class="bg-image" src="{% static 'img/photo/new-york.jpg' %}"
+              alt="Card image">
+            <div class="card-body overlay-content">
+              <h6 class="card-title text-shadow text-uppercase">異年齢保育</h6>
+            </div>
+          </div>
+        </div>
+-->
+      <div class="swiper-slide h-auto px-2">
+        <div class="card card-poster gradient-overlay hover-animate mb-4 mb-lg-0">
+            <!-- クエリパラメータを渡すためのデータ属性を追加 -->
+            <a class="tile-link" data-query="異年齢保育"></a>
+            <img class="bg-image" src="{% static 'img/original/inenrei.png' %}" alt="Card image">
+            <div class="card-body overlay-content">
+                <h6 class="card-title text-shadow text-uppercase">異年齢保育</h6>
+            </div>
+        </div>
+      </div>
+      <div class="swiper-slide h-auto px-2">
+          <div class="card card-poster gradient-overlay hover-animate mb-4 mb-lg-0"><a class="tile-link" data-query="育児担当制"></a><img class="bg-image" src="{% static 'img/original/ikujitantou.jpg' %}" alt="Card image">
+            <div class="card-body overlay-content">
+              <h6 class="card-title text-shadow text-uppercase">育児担当制</h6>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide h-auto px-2">
+          <div class="card card-poster gradient-overlay hover-animate mb-4 mb-lg-0"><a class="tile-link"
+            data-query="子ども主体の保育"></a><img class="bg-image" src="{% static 'img/original/shutai.png' %}"
+              alt="Card image">
+            <div class="card-body overlay-content">
+              <h6 class="card-title text-shadow text-uppercase">主体性</h6>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide h-auto px-2">
+          <div class="card card-poster gradient-overlay hover-animate mb-4 mb-lg-0"><a class="tile-link"
+            data-query="保育ドキュメンテーション"></a><img class="bg-image" src="{% static 'img/original/doc.jpg' %}" alt="Card image">
+            <div class="card-body overlay-content">
+              <h6 class="card-title text-shadow text-uppercase">保育ドキュメンテーション</h6>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-slide h-auto px-2">
+          <div class="card card-poster gradient-overlay hover-animate mb-4 mb-lg-0"><a class="tile-link"
+            data-query="モンテッソーリ"></a><img class="bg-image" src="{% static 'img/original/monte.png' %}" alt="Card image">
+            <div class="card-body overlay-content">
+              <h6 class="card-title text-shadow text-uppercase">モンテッソーリ</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="swiper-pagination d-md-none"> </div>
+    </div>
+  </div>
+</section>
+<section class="py-6 custom_py-6">
+  <div class="container" >
+    <div class="description_bg" style="background-image:url('{% static 'img/original/description_bg.png' %}')">
+      <div class="text-center pb-lg-4 custom_description_right custom_description_touka"> 
+        <div class="description_bg_container" style="background-image:url('{% static 'img/original/description_text_bg.png' %}')">
+          <h1 class="mb-5 top_h1">「子どもの預け先を探そうと思うけど、<br>何を基準に選んだらいいのか分からない。」
+            <br><br>
+            「保育園ではどんなことをしてくれるの？<br>いまいち保育って分からない。<br>先生達は何を考えて子どもと接しているのかな。」
+            <br><br>
+            そんなお悩みを保育園の日常を<br>覗いてみることで解決するサイトです。
+          </h1><br>
+        </div>
+        <p class="text-muted">
+          実は保育園に実際に預けているお父さん、お母さんも、<br>日頃の様子は保育者から聞いていても<br>「どんな思いで子どもに接してくれているのかいまいち分からない。」<br>という人も多いのではないでしょうか。
+          <br>
+          大事な子どもを預けるのだから、<br>どのような考え方で子どもと接してくれるのか知りたいですよね。
+          <br><br>
+          このサイトは、現役保育士が設計しています。
+          このサイトで保育園探しが終わる頃には、<br>あなたが預けたい保育園で、<br>子どもが夢中になって遊んでいる姿がきっと目に浮かんでいることでしょう。
+          <br>
+          子どもたちと地域を結ぶ。その一助になれたなら幸いです。
+          <br>
+        </p>
+      </div>
+    </div>
+    <div class="row description_detail" style="background-image:url('{% static 'img/original/description_detail_bg.png' %}')">
+      <div class="description_detail_deco text-center">
+        <p class="subtitle text-secondary custom_subtitle" style="background-image:url('{% static 'img/original/detail-title-bg.png' %}')">このサイトでできること</p>
+      </div>
+      <div class="col-lg-4 mb-3 mb-lg-0 text-center descri_detail_text" style="background-image:url('{% static 'img/original/detail1.png' %}')">
+        <div class="px-0 px-lg-3 descri_position">
+          <h2 class="h5 h2_color"><span class="linemarker">自分の子どもに合った保育園を探すことができる！</span></h2>
+          <p class="text-muted">　この保育園検索サイトでは保育園毎に園の特徴や子どもが体験できることなど、リアルな保育園生活を知ることができます。<br>　みんな同じように見える保育園も、実は考え方はそれぞれ違います。どのような保育を行っているのかを知ることで、自分の思いや子どもにピッタリの保育園を探すことができます。</p>
+        </div>
+      </div>
+      <div class="col-lg-4 mb-3 mb-lg-0 text-center descri_detail_text" style="background-image:url('{% static 'img/original/detail2.png' %}')">
+        <div class="px-0 px-lg-3 descri_position">
+          <h2 class="h5 h2_color"><span class="linemarker">保育内容を細かく知ることで、自分の子どもが園に通っている姿を想像することができる！</span></h2>
+          <p class="text-muted">　この保育園検索サイトでは実際に子どもが保育園に通って得ることができる経験も保育園毎に知ることができます。<br>　自分の子どもが実際どのような経験をするのか知ることで、子どもが園に通って遊んでいる姿を想像することができます。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,244 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+{% if nursery.feature_image %}
+<section class="pt-7 pb-5 d-flex align-items-end dark-overlay bg-cover"
+  style="background-image: url('{{ nursery.feature_image }}');">
+{% else %}
+<section class="pt-7 pb-5 d-flex align-items-end dark-overlay bg-cover"
+style="background-image: url('{% static 'img/original/sub.jpg' %}');">
+{% endif %}
+  <div class="container overlay-content">
+    <div class="d-flex justify-content-between align-items-start flex-column flex-lg-row align-items-lg-end">
+      <div class="text-white mb-4 mb-lg-0">
+        <div class="badge badge-pill badge-transparent px-3 py-2 mb-4">{{ nursery.type }}</div>
+        <h1 class="text-shadow verified custom_text-shadow">{{ nursery.feature|linebreaks }}</h1>
+        <p class="custom_text-shadow">{{ nursery.name }}</p>
+        <div class="row">
+          {% if nursery.address %}
+          <p class="custom_text-shadow" style="width: auto;"><i class="fa-map-marker-alt fas me-2"></i>{{ nursery.address }} </p>
+          {% endif %}
+          {% if nursery.phone_number %}
+          <p class="custom_text-shadow" style="width: auto;"> <i class="fa fa-phone me-3"></i>{{ nursery.phone_number }}</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="py-6 info_color">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
+        <!-- 特色-->
+        <div class="text-block">
+          <!-- SVGのコンテンツをここに追加 -->
+          <div class="mb-3 custom_info_subtitle">
+            <h3 class="custom_info_h3">こんな保育をしています</h3>
+          </div>
+          <div class="custom_box_design">
+            {% if nursery.description %}
+            <p class="text-muted">{{ nursery.description|linebreaks }}</p>
+            {% else %}
+            <p class="text-muted">まだ登録されていません。</p>
+            {% endif %}
+          </div>
+        </div>
+        <!--保育園で子どもたちが経験できること-->
+        <div class="text-block">
+          <div class="mb-3 custom_info_subtitle">
+            <h3 class="custom_info_h3">こんな経験ができます</h3>
+          </div>
+          {% if nursery.experience_image %}
+          <div class="map-wrapper-300 mb-3" style="background-image: url('{{ nursery.experience_image }}'); background-repeat: no-repeat; background-size: contain; background-position: center;"></div>
+          {% endif %}
+          <div class="custom_box_design">
+            {% if nursery.experience %}
+            <p class="text-muted">{{ nursery.experience|linebreaks }}</p>
+            {% else %}
+            <p class="text-muted">まだ登録されていません。</p>
+            {% endif %}
+          </div>
+        </div>
+        <!--子どもたちにどのように育ってもらいたいか-->
+        <div class="text-block">
+          <div class="mb-3 custom_info_subtitle">
+            <h3 class="custom_info_h3">これを大事にしています</h3>
+          </div>
+          <div class="custom_box_design">
+            {% if nursery.future %}
+            <p class="text-muted">{{ nursery.future|linebreaks }}</p>
+            {% else %}
+            <p class="text-muted">まだ登録されていません。</p>
+            {% endif %}
+          </div>
+        </div>
+        <div class="text-block">
+          <!--地図-->
+          <div class="mb-4 custom_info_subtitle">
+            <h3 class="custom_info_h3">地図</h3>
+          </div>
+          <div class="map-wrapper-300 mb-3">
+            <div class="h-100" id="detailMap">
+              <iframe width="100%" height="300" src="https://maps.google.co.jp/maps?&output=embed&q={{ address }}&z=18"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="ps-xl-4">   
+          <!-- Contact-->
+          <div class="card border-0 shadow mb-5">
+            <div class="card-header bg-gray-100 py-4 border-0">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <h4 class="mb-0">園の詳細情報</h4>
+                </div>
+                <svg class="svg-icon svg-icon svg-icon-light w-3rem h-3rem ms-3 text-muted flex-shrink-0">
+                  <use xlink:href="#pin-1"> </use>
+                </svg>
+              </div>
+            </div>
+            <div class="card-body">
+              <ul class="list-unstyled mb-4">
+                {% if nursery.capacity_0 or nursery.capacity_1 or nursery.capacity_2 or nursery.capacity_3 or nursery.capacity_4 or nursery.capacity_5 or nursery.open_hours or nursery.extension_time or nursery.holidays %}
+                  {% if nursery.capacity_0  != 0 %}
+                  <li class="mb-2"> <a class="text-gray-00 text-sm text-decoration-none"><span class="text-muted">定員数０歳：{{ nursery.capacity_0 }}人</span></a></li>
+                  {% endif %}
+                  {% if nursery.capacity_1 != 0 %}
+                  <li class="mb-2"> <a class="text-gray-00 text-sm text-decoration-none"><span class="text-muted">定員数１歳：{{ nursery.capacity_1 }}人</span></a></li>
+                  {% endif %}
+                  {% if nursery.capacity_2 != 0 %}
+                  <li class="mb-2"> <a class="text-gray-00 text-sm text-decoration-none"><span class="text-muted">定員数２歳：{{ nursery.capacity_2 }}人</span></a></li>
+                  {% endif %}
+                  {% if nursery.capacity_3 != 0 %}
+                  <li class="mb-2"> <a class="text-gray-00 text-sm text-decoration-none"><span class="text-muted">定員数３歳：{{ nursery.capacity_3 }}人</span></a></li>
+                  {% endif %}
+                  {% if nursery.capacity_4 != 0 %}
+                  <li class="mb-2"> <a class="text-gray-00 text-sm text-decoration-none"><span class="text-muted">定員数４歳：{{ nursery.capacity_4 }}人</span></a></li>
+                  {% endif %}
+                  {% if nursery.capacity_5 != 0 %}
+                  <li class="mb-2"> <a class="text-gray-00 text-sm text-decoration-none"><span class="text-muted">定員数５歳：{{ nursery.capacity_5 }}人</span></a></li>
+                  {% endif %}
+                  {% if nursery.playground %}
+                  <li class="mb-2"> <a class="text-gray-00 text-sm text-decoration-none"><span class="text-muted">園庭：{{ nursery.playground }}</span></a></li>
+                  {% endif %}
+                  {% if nursery.open_hours %}
+                  <li class="mb-2"> <a class="text-gray-00 text-sm text-decoration-none"><span class="text-muted">開所時間：{{ nursery.open_hours }}</span></a></li>
+                  {% endif %}
+                  {% if nursery.extension_time %}
+                  <li class="mb-2"> <a class="text-gray-00 text-sm text-decoration-none"><span class="text-muted">延長保育の時間：{{ nursery.extension_time }}</span></a></li>
+                  {% endif %}
+                  {% if nursery.holidays %}
+                  <li class="mb-2"> <a class="text-gray-00 text-sm text-decoration-none"><span class="text-muted">休園日：{{ nursery.holidays }}</span></a></li>
+                  {% endif %}
+                {% else %}
+                  <!-- 全ての項目が存在しない場合の表示 -->
+                  <li class="mb-2"> <a class="text-gray-00 text-sm text-decoration-none"><span class="text-muted">詳細情報は登録されていません。</span></a></li>
+              {% endif %}
+              </ul>
+            </div>
+          </div>
+          <!-- Contact-->
+          <div class="card border-0 shadow mb-5">
+            <div class="card-header bg-gray-100 py-4 border-0">
+              <div class="d-flex align-items-center justify-content-between">
+                <div>
+                  <p class="subtitle text-sm text-primary">興味が出たら保育園へ見学の申し込みをしてみませんか？</p>
+                  <h4 class="mb-0">お問い合わせ</h4>
+                </div>
+                <svg class="svg-icon svg-icon svg-icon-light w-3rem h-3rem ms-3 text-muted flex-shrink-0">
+                  <use xlink:href="#paper-plane-1"> </use>
+                </svg>
+              </div>
+            </div>
+            <div class="card-body">
+              <ul class="list-unstyled mb-4">
+                {% if nursery.phone_number %}
+                <li class="mb-2"> <a class="text-gray-00 text-sm text-decoration-none" href="tel:{{ nursery.phone_number }}"><i
+                      class="fa fa-phone me-3"></i>                    <span class="text-muted">{{ nursery.phone_number }}</span></a></li>
+                {% endif %}
+                {% if nursery.email %}
+                <li class="mb-2"> <a class=" text-sm text-decoration-none" href="mailto:{{ nursery.email }}"><i
+                      class="fa fa-envelope me-3"></i><span class="text-muted">{{ nursery.email }}</span></a></li>
+                {% endif %}
+                {% if nursery.url %}
+                <li class="mb-2"> <a class=" text-sm text-decoration-none" href="{{ nursery.url }}"><i
+                class="fa fa-globe me-3"></i><span class="text-muted">{{ nursery.url }}</span></a></li>
+                {% endif %}
+              </ul>
+              <div class="d-grid text-center"><a class="btn btn-outline-primary" href="mailto:{{ nursery.email }}"> <i
+                    class="far fa-paper-plane me-2"></i>保育園へメールで連絡をとってみたい方はこちら</a></div>
+            </div>
+          </div>       
+        </div>
+      </div>
+    </div>
+    <!--フッター部に電話番号表示-->
+{% if nursery.phone_number %}
+  <div class="fotter_contents">園見学の申し込みはこちらから！<br />
+    <a class="fotter_contents_a" href="tel:{{ nursery.phone_number }}" >{{ nursery.phone_number }}</a>
+    <!--onclick="ga('send', 'event', '電話リンク', 'タップ');"-->
+  </div>
+{% endif %}
+  </div>
+</section>
+{% if other_nursery %}
+<div class="py-6 bg-gray-100 custom_padding-top">
+  <div class="container">
+    <h5 class="mb-0 linemarker">好みに近い保育園をピックアップしました!</h5>
+    <p class="subtitle text-sm text-primary mb-4">気に入った保育園が必ず見つかる！</p>
+    <!-- Slider main container-->
+    <div class="swiper-container swiper-container-mx-negative items-slider">
+      <!-- Additional required wrapper-->
+      <div class="swiper-wrapper pb-5">
+        <!-- Slides-->
+        {% for Nursery in other_nursery %}
+        <div class="swiper-slide h-auto px-2">
+          <!-- venue item-->
+          <div class="w-100 h-100" data-marker-id="59c0c8e33b1527bfe2abaf92">
+            <div class="card h-100 border-0 shadow">
+
+              {% if Nursery.feature_image %}
+              <div class="card-img-top overflow-hidden dark-overlay bg-cover" style="background-image: url('{{ Nursery.feature_image }}'); min-height: 200px;">
+              {% else %}
+              <div class="card-img-top overflow-hidden dark-overlay bg-cover"
+                style="background-image: url('{% static 'img/original/sub.jpg' %}'); min-height: 200px;">
+              {% endif %}
+                <a class="tile-link"  href="{% url 'hoikone:nursery-info' pk=Nursery.nursery_number %}"></a>
+                <div class="card-img-overlay-bottom z-index-20">
+                  <h4 class="text-white text-shadow">{{ Nursery.feature }}</h4>
+                </div>
+                <div class="card-img-overlay-top d-flex justify-content-between align-items-center">
+                  <div class="badge badge-transparent badge-pill px-3 py-2">{{ Nursery.type }}</div>
+                </div>
+              </div>
+              <div class="card-body" style="background-color: rgb(228, 241, 220); height: 250px;">
+                <a class="tile-link" href="{% url 'hoikone:nursery-info' pk=Nursery.nursery_number %}"></a>
+                <div class="custom_read-more-gradi">
+                  {% if Nursery.description %}
+                  <p class="custom_read-more text-sm text-muted mb-3">{{ Nursery.description }}
+                  {% else %}
+                  <p class="custom_read-more text-sm text-muted mb-3">まだ登録されていません。
+                  {% endif %}
+                  </p>
+                </div>
+                <p class="text-sm text-muted text-uppercase mb-1 custom_overtext" style="width: 100%; font-weight:bold;"><a href="#" class="text-dark"><span style="background: linear-gradient(transparent 40%, #ffff66 60%);">{{ Nursery.name }}</span></a></p>
+                <p class="text-sm mb-0 custom_overtext" style="height: 23px;"><a class="me-1" href="#">{{ Nursery.phone_number }}</a>
+                  <a class="me-1" href="#">{{ Nursery.address }}</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      <!-- If we need pagination-->
+      <div class="swiper-pagination"></div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+{% endblock %}

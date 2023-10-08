@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<section class="mh-full-screen py-5" style="background-color: rgb(228, 241, 220)">
+  <div class="container">
+    {% if errors %}
+    <ul>
+      {% for field, error_msgs in errors.items %}
+      <li>{{ field }}: {{ error_msgs|join:", " }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    
+    <p class="subtitle text-primary custom_subtitle-size" style="height: auto; margin-bottom:30px;">メールアドレスを変更できます。新しいメールアドレスを入力後に下の変更ボタンを押して下さい。確認メールが送信されます。</p>
+    <div id="pp">
+      <h3 class="pp-ttl" style="font-weight: normal;">メールアドレス変更</h3>
+    </div>
+    <form action="{% url 'email_change' %}" method="POST">
+      {{ form.non_field_errors }}
+      {% for field in form %}
+      <div class="form-group">
+          <label for="{{ field.id_for_label }}">{{ field.label_tag }}</label>
+          {{ field }}
+          {{ field.errors }}
+      </div>
+      {% endfor %}
+      {% csrf_token %}
+      <button type="submit" class="btn btn-primary btn-lg" style="margin-top: 30px;">変更</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

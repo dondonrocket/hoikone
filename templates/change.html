@@ -1,0 +1,267 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<section class="py-5">
+  <div class="container">
+    {% if errors %}
+    <ul>
+      {% for field, error_msgs in errors.items %}
+      <li>{{ field }}: {{ error_msgs|join:", " }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    <h1 class="h2 mb-5 hoikujouhou_color" style="letter-spacing:0.1em;"> 保育園情報変更ページ</h1>
+    <p class="subtitle text-primary mb-5 custom_subtitle-size" style="font-size:15px; height:auto;">保育園情報を変更できます。変更後は下の更新ボタンを押して変更を完了して下さい。</p>
+
+    <form method="POST" action="{% url 'hoikone:change' %}" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="row form-block">
+        <div class="col-lg-4">
+          <h4 class="hoikujouhou_color">基本情報</h4>
+          <p class="text-muted text-sm">保育園の基本情報を入力してください。</p>
+          <img class="background_img" src="{% static 'img/original/user_add_kihon.png' %}">
+        </div>
+        <div class="col-lg-7 ms-auto">
+          <div class="mb-4">
+            <label class="form-label" for="form_name">保育園名</label>
+            <input class="form-control" name="name" id="form_name" value="{{ nursery.name }}">
+          </div>
+          <div class="mb-4">
+            <label class="form-label" for="form_type">保育園の種類</label>
+            <select class="selectpicker form-control" name="type" id="form_type" data-style="btn-selectpicker" title=""
+              aria-describedby="propertyTypeHelp">
+              {% if nursery.type %}
+              <option value="{{ nursery.type }}" selected>{{ nursery.type }}</option>
+              {% else %}
+              <option value="" selected>選択してください</option>
+              {% endif %}
+              <option value="認可保育園">認可保育園</option>
+              <option value="認定こども園">認定こども園</option>
+              <option value="小規模保育所">小規模保育所</option>
+              <option value="事業所内保育園">事業所内保育園</option>
+              <option value="認証・認定（自治体認定保育園）">認証・認定（自治体認定保育園）</option>
+              <option value="その他">その他</option>
+            </select>
+
+          </div>
+          <div class="mb-4">
+            <label class="form-label" for="form_name">住所</label>
+            <input class="form-control" name="address" id="form_name" placeholder="例：東京都狛江市×-×-×"
+              value="{{ nursery.address }}">
+          </div>
+          <div class="mb-4">
+            <label class="form-label" for="form_name">電話番号</label>
+            <input class="form-control" name="phone_number" id="form_name" placeholder="例：03-0000-0000"
+              value="{{ nursery.phone_number }}">
+          </div>
+          <div class="mb-4">
+            <label class="form-label" for="form_name">メールアドレス</label>
+            <input class="form-control" name="email" id="form_name" placeholder="例：hoikuen@hoiku.ne.jp"
+              value="{{ nursery.email }}">
+          </div>
+        </div>
+      </div>
+      <div class="row form-block">
+        <div class="col-lg-4">
+          <h4 class="hoikujouhou_color">保育園紹介</h4>
+          <p class="text-muted text-sm">
+            保育園紹介ページのメインになる部分です。あなたの保育園の魅力を教えて下さい。</p>
+            <img class="background_img" src="{% static 'img/original/user_add_tokushoku.png' %}">
+        </div>
+        <div class="col-lg-7 ms-auto">
+          <!-- 特色-->
+          <div class="mb-5">
+            <label class="form-label linemarker" for="form_name">あなたの保育園の特色を一文に要約して下さい。(40文字以内)</label>
+            <textarea class="form-control" name="feature" id="form_description" rows="5"
+              aria-describedby="descriptionHelp" maxlength="40">{{ nursery.feature }}</textarea><small
+              class="form-text text-muted mt-2 custom_form-text" id="descriptionHelp">検索のキーワードはこの特色の項目でヒットします。例：「異年齢保育の中で、慕い慕われることによって人間性を育みます。」この例では、「異年齢保育」というキーワードが検索で引っかかるようになります。</small>
+          </div>
+          <!-- 画像アップロード-->
+          <div class="mb-4">
+            <label class="form-label"
+              for="form_feature_image"><span class="linemarker">保育園の特色を表現している画像を選択して下さい。</span><br>（※ここで選択した画像は下の更新ボタンを押した後、サーバーにアップロードされます。）</label>
+            <input type="file" class="form-control" name="feature_image" id="form_feature_image" accept="image/*">
+            {% if nursery.feature_image2 %}
+            <label class="form-label" for="feature_image_preview">現在登録されている画像</label>
+            {% endif %}
+            <!-- 表示される画像の部分 -->
+            {% if nursery.feature_image2 %}
+            <img class="preview_size" id="feature_image_preview" src="{{ nursery.feature_image2 }}" alt="Feature Image">
+            {% else %}
+            <img class="preview_size" id="feature_image_preview" src="">
+            {% endif %}
+          </div>
+          <!--特色をいかすためにどのように保育をしているか-->
+          <div class="mb-5">
+            <label class="form-label linemarker" for="form_city">特色を表現している保育内容を教えて下さい。</label>
+            <textarea class="form-control" name="description" id="form_description" rows="5"
+              aria-describedby="descriptionHelp">{{ nursery.description }}</textarea><small
+              class="form-text text-muted mt-2"
+              id="descriptionHelp">入力して頂いた特色を表す具体的なエピソードを交えると分かりやすくなります。</small>
+          </div>
+          <!--子どもたちにどのように育ってもらいたいか-->
+          <div class="mb-5">
+            <label class="form-label linemarker" for="form_state">子どもと接する時に何を大事にしていますか？</label>
+            <textarea class="form-control" name="future" id="form_description" rows="5"
+              aria-describedby="descriptionHelp">{{ nursery.future }}</textarea><small class="form-text text-muted mt-2"
+              id="descriptionHelp">実際に保育士が子どもとどのように関わっているか。その関わりを経てどのような大人になって欲しいかを入力することで、理解しやすくなります。</small>
+          </div>
+          <!--あなたの保育園で子どもが体験できる経験を1つ教えてください。-->
+          <div class="mb-5">
+            <label class="form-label linemarker" for="form_state">あなたの保育園で子どもが体験できる経験を1つ教えてください。</label>
+            <textarea class="form-control" name="experience" id="form_description" rows="5"
+              aria-describedby="descriptionHelp">{{ nursery.experience }}</textarea><small
+              class="form-text text-muted mt-2 custom_form-text"
+              id="descriptionHelp">保育園での具体的なエピソードを交えて入力してもらうと、子どもが入園した後にどのような体験を園ですることができるのか想像することができます。</small>
+          </div>
+          <!--子どもが体験できる経験の画像-->
+          <div class="mb-4">
+            <label class="form-label"
+              for="form_experience_image">子どもが経験している画像を選択して下さい。<br>（※ここで選択した画像は下の更新ボタンを押した後、サーバーにアップロードされます。）</label>
+            <input type="file" class="form-control" name="experience_image" id="form_experience_image" accept="image/*">
+            {% if nursery.experience_image2 %}
+            <label class="form-label" for="experience_image_preview">現在登録されている画像</label>
+            {% endif %}
+            {% if nursery.experience_image2 %}
+            <img class="preview_size" id="experience_image_preview" src="{{ nursery.experience_image2 }}" alt="Experience Image">
+            {% else %}
+            <img class="preview_size" id="experience_image_preview" src="">
+            {% endif %}
+
+          </div>
+        </div>
+      </div>
+      <div class="row form-block" style="border-bottom: none;">
+        <div class="col-lg-4">
+          <h4 class="hoikujouhou_color">詳細情報</h4>
+          <p class="text-muted text-sm">保育園についての詳細情報を入力して下さい。</p>
+          <img class="background_img" src="{% static 'img/original/user_add_shousai.png' %}">
+        </div>
+        <!--定員数-->
+        <!--        <div class="col-md-6">-->
+        <div class="col-lg-7 ms-auto">
+          <div class="row">
+            <div class="col-lg-4">
+              <label class="form-label">定員数…0歳</label>
+              <div class="d-flex align-items-center">
+                <div class="btn btn-items btn-items-decrease">-</div>
+                <input class="form-control input-items" type="number"
+                  value="{% if nursery.capacity_0 %}{{ nursery.capacity_0 }}{% else %}0{% endif %}" name="capacity_0">
+                <div class="btn btn-items btn-items-increase">+</div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <label class="form-label">定員数…1歳</label>
+              <div class="d-flex align-items-center">
+                <div class="btn btn-items btn-items-decrease">-</div>
+                <input class="form-control input-items" type="number"
+                  value="{% if nursery.capacity_1 %}{{ nursery.capacity_1 }}{% else %}0{% endif %}" name="capacity_1">
+                <div class="btn btn-items btn-items-increase">+</div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <label class="form-label">定員数…2歳</label>
+              <div class="d-flex align-items-center">
+                <div class="btn btn-items btn-items-decrease">-</div>
+                <input class="form-control input-items" type="number"
+                  value="{% if nursery.capacity_2 %}{{ nursery.capacity_2 }}{% else %}0{% endif %}" name="capacity_2">
+                <div class="btn btn-items btn-items-increase">+</div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-4">
+              <label class="form-label">定員数…3歳</label>
+              <div class="d-flex align-items-center">
+                <div class="btn btn-items btn-items-decrease">-</div>
+                <input class="form-control input-items" type="number"
+                  value="{% if nursery.capacity_3 %}{{ nursery.capacity_3 }}{% else %}0{% endif %}" name="capacity_3">
+                <div class="btn btn-items btn-items-increase">+</div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <label class="form-label">定員数…4歳</label>
+              <div class="d-flex align-items-center">
+                <div class="btn btn-items btn-items-decrease">-</div>
+                <input class="form-control input-items" type="number"
+                  value="{% if nursery.capacity_4 %}{{ nursery.capacity_4 }}{% else %}0{% endif %}" name="capacity_4">
+                <div class="btn btn-items btn-items-increase">+</div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <label class="form-label">定員数…5歳</label>
+              <div class="d-flex align-items-center">
+                <div class="btn btn-items btn-items-decrease">-</div>
+                <input class="form-control input-items" type="number"
+                  value="{% if nursery.capacity_5 %}{{ nursery.capacity_5 }}{% else %}0{% endif %}" name="capacity_5">
+                <div class="btn btn-items btn-items-increase">+</div>
+              </div>
+            </div>
+          </div>      
+          <div class="mb-4" style="margin-top:50px">
+            <!--園庭-->
+            <div class="mb-4">
+              <p class="form-label"><span class="linemarker">園庭はありますか？</span></p>
+              <input type="radio" id="form_name" name="playground" value="ある" {% if nursery.playground == 'ある' %}checked{% endif %}/>
+              <label for="form_name" style="margin-right: 100px;">ある</label>
+              <input type="radio" id="form_name" name="playground" value="ない" {% if nursery.playground == 'ない' %}checked{% endif %}/>
+              <label for="form_name">ない</label>
+            </div>
+            <!--開所時間-->
+            <div class="mb-4">
+              <label class="form-label linemarker" for="form_name">開所時間は何時から何時までですか？</label>
+              <input class="form-control" name="open_hours" id="form_name" placeholder="例：7時15分～20時15分"
+                value="{{ nursery.open_hours}}">
+            </div>
+            <!--延長保育の時間-->
+            <div class="mb-4">
+              <label class="form-label linemarker" for="form_name">延長保育はありますか？何時から何時までですか？</label>
+              <input class="form-control" name="extension_time" id="form_name" placeholder="例：18時15分～20時15分"
+                value="{{ nursery.extension_time }}">
+              <small class="form-text text-muted mt-2" id="descriptionHelp">延長保育が無い場合は無しと入力してください。</small>
+            </div>
+            <!--休園日-->
+            <div class="mb-4">
+              <label class="form-label linemarker" for="form_name">休園日を教えて下さい。</label>
+              <input class="form-control" name="holidays" id="form_name" placeholder="例：日曜日、祝日"
+                value="{{ nursery.holidays }}">
+            </div>
+            <!--url-->
+            <div class="mb-4">
+              <label class="form-label linemarker" for="form_name">ホームページのurl</label>
+              <input class="form-control" name="url" id="form_name" placeholder="例：http://www.hoikuen.com"
+                value="{{ nursery.url }}">
+            </div>
+            <!--園の画像-->
+            <div class="mb-4">
+              <label class="form-label"
+                for="form_image"><span class="linemarker">園舎の画像を選択して下さい。</span><br>（※ここで選択した画像は下の更新ボタンを押した後、サーバーにアップロードされます。）</label>
+              <input type="file" class="form-control" name="image" id="form_image" accept="image/*">
+              {% if nursery.image2 %}
+              <label class="form-label" for="image_preview">現在登録されている画像</label>
+              {% endif %}
+              {% if nursery.image2 %}
+              <img class="preview_size" id="image_preview" src="{{ nursery.image2 }}" alt="Image">
+              {% else %}
+              <img class="preview_size" id="image_preview" src="">
+              {% endif %}
+    
+            </div>
+          </div>
+    
+        </div>
+      </div>
+      <div class="text-center">
+        <p class="linemarker">おつかれさまでした！</p>
+      </div>
+      <div class="row form-block flex-column flex-sm-row">
+        <div class="col text-center">
+          <input type="submit" value="更新する" class="btn btn-primary px-3">
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+
+{% endblock %}

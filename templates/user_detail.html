@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<section class="mh-full-screen py-5" style="background-color: rgb(228, 241, 220)">
+  <div class="container">
+    <!-- Breadcrumbs -->
+    <div id="pp"><h3 class="pp-ttl" style="font-weight: normal;">ユーザー情報と保育園情報を削除</h3></div>
+    <p class="text-muted mb-5" style="padding-left: 8px;">登録した情報を削除することができます。</p>
+    <div class="row">
+      <div class="col-lg-7 mb-5 mb-lg-0">
+        <div class="text-block">
+          <h3 class="mb-4"></h3>
+          <div class="row">
+            <div class="col-sm-8">
+              <h6 style="padding-left: 8px;">ユーザー情報と保育園情報を削除</h6>
+              <p class="text-sm text-muted" style="padding-left: 8px;">※一度削除したユーザー情報と保育園情報は元に戻りませんのでご注意下さい。</p>
+            </div>
+            <div class="col text-end">
+              <form method="POST" action="{% url 'user_detail' username=user.username %}">
+                {% csrf_token %}
+                <button class="btn btn-primary btn-lg mx-auto" type="submit">削除する</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{% endblock %}

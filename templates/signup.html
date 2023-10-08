@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container-fluid px-3" style="margin-top: 50px;">
+  <div class="mb-4 custom_user_mb-4"><img class="img-fluid mb-4" src="{% static 'img/original/user.svg' %}" alt="user" style="max-width: 4rem;">
+    <h2 class="custom_user_color">ユーザー登録</h2>
+    <p class="text-muted">ホイコネ！をご利用頂きましてありがとうございます！ユーザー登録後に保育園情報の登録画面に移動します。<br>ご利用の際は、必ず下記「個人情報保護方針」をご一読ください。
+      その内容に同意していただけましたら、下記フォームに必要事項をご入力の上、ユーザー登録ボタンを押して下さい。<br>※ユーザー登録後に登録したメールアドレスに確認のメールが届きます。パスワードは記載されていないのでご注意下さい。</p>
+  </div>
+  <div class="row min-vh-100">
+    <div class="col-md-8 col-lg-6 col-xl-5 d-flex">
+      <div class="w-100 py-5 px-md-5 px-xxl-6 position-relative">
+        <form class="form-validate" method="POST" action="{% url 'register' %}">
+          {% csrf_token %}
+          <div class="mb-4">
+            <label class="form-label" for="loginPassword2">ユーザー名<br>(半角英数字と@,.,+,-の記号のみ使用できます。)</label>
+            <input class="form-control" name="username" id="loginPassword2" placeholder="ユーザー名(半角英数字と記号のみ使用できます。)" type="text" required
+              data-msg="ユーザー名を入力して下さい。（英数字と@,.,+,-のみが使用できます。）" pattern="[a-zA-Z0-9]+" value="{{ username }}">
+            {% if field_errors.username %}
+            <ul class="errorlist">
+              {% for error in field_errors.username %}
+                <li class="error_color">{{ error }}</li>
+              {% endfor %}
+            </ul>
+            {% endif %}
+          </div>
+          <div class="mb-4">
+            <label class="form-label" for="loginPassword3"> メールアドレス</label>
+            <input class="form-control" name="email" id="loginPassword3" placeholder="メールアドレスを入力して下さい。" type="email" required
+              data-msg="メールアドレスを入力して下さい。" value="{{ email }}">
+              {% if field_errors.email %}
+              <ul class="errorlist">
+                {% for error in field_errors.email %}
+                  <li class="error_color">{{ error }}</li>
+                {% endfor %}
+              </ul>
+              {% endif %}
+          </div>
+          <div class="mb-4">
+            <label class="form-label" for="loginPassword"> パスワード<br>(8文字以上で入力して下さい。数字のみのパスワードは使えません。)</label>
+            <input class="form-control" name="password" id="loginPassword" placeholder="パスワードを入力して下さい。" type="password"
+              required data-msg="パスワードを入力して下さい。" value="{{ password }}">
+              {% if field_errors.password %}
+              <ul class="errorlist">
+                {% for error in field_errors.password %}
+                  <li class="error_color">{{ error }}</li>
+                {% endfor %}
+              </ul>
+              {% endif %}
+            
+
+          </div>
+          <div class="consent-txt">
+            <input type="checkbox" id="check" name="agreement" required="">
+            <label for="check">当サイトの<a href="#pp">個人情報保護方針</a>に同意する</label><br>
+            ※同意いただけない場合は送信ができません。
+          </div>
+          <div class="d-grid gap-2">
+            <button class="btn btn-lg btn-primary" type="submit" value="Register">ユーザー登録</button>
+          </div>
+          <hr class="my-4">
+          <section id="pp" style="background-color: rgb(228, 241, 220)">
+            <div class="container" style="background-color:#FFFFFF">
+              <h3 class="pp-ttl" style="color:#5b5b5b">個人情報保護方針</h3>
+              <div class="pp-body">
+                  <p>
+                    当サイトの運営に際し、利用者のプライバシーを尊重し個人情報に対して十分な配慮を行うとともに、<br>
+                    大切に保護し、適正な管理を行うことに努めております。
+                  </p>
+                  <dl>
+                    <dt>【個人情報の利用目的】</dt>
+                    <dd>
+                      a）利用者のご要望に合わせたサービスを提供するためのご連絡。<br>
+                      b）お問い合わせいただいたご質問への回答のご連絡。<br>
+                      c）保育園情報の表示。
+                    </dd>
+                  </dl>
+                  <ul>
+                    <li>・公正かつ適正な手段で、上記目的に必要となる個人情報を収集します。</li>
+                    <li>・要配慮個人情報を取得する際は、ご本人の同意を得るものとします。</li>
+                    <li>・取得した個人情報・要配慮個人情報は、ご本人の同意なしに目的以外では利用しません。</li>
+                    <li>・情報が漏洩しないよう対策を講じます。</li>
+                    <li>・国内外を問わず、ご本人の同意を得ずに第三者に情報を提供しません。</li>
+                    <li>・ご本人からの求めに応じ情報を開示します。</li>
+                    <li>・公開された個人情報が事実と異なる場合、訂正や削除に応じます。</li>
+                    <li>・個人情報の取り扱いに関する苦情に対し、適切・迅速に対処します。</li>
+                    <li>・本個人情報保護方針の適用範囲は本サイト内のみとします。</li>
+                  </ul>
+                  <dl>
+                      <dt>【Googleアナリティクスの使用について】</dt>
+                      <dd>
+                        当サイトでは、より良いサービスの提供、またユーザビリティの向上のため、Googleアナリティクスを使用し、当サイトの利用状況などのデータ収集及び解析を行っております。その際、「Cookie」を通じて、Googleがお客様のIPアドレスなどの情報を収集する場合がありますが、「Cookie」で収集される情報は個人を特定できるものではありません。<br>
+                        収集されたデータはGoogleのプライバシーポリシーにおいて管理されます。<br>
+                        なお、当サイトのご利用をもって、上述の方法・目的においてGoogle及び当サイトが行うデータ処理に関し、お客様にご承諾いただいたものとみなします。
+                      </dd>
+                  </dl>
+                  <dl>
+                    <dt>■Googleのプライバシーポリシー</dt>
+                    <dd>
+                      <a href="http://www.google.com/intl/ja/policies/privacy/" target="_blank">http://www.google.com/intl/ja/policies/privacy/</a><br>
+                      <a href="https://www.google.com/intl/ja/policies/privacy/partners/" target="_blank">https://www.google.com/intl/ja/policies/privacy/partners/</a>
+                    </dd>
+                  </dl>
+                  <dl>
+                    <dt>【個人情報に関するお問い合わせ先】</dt>
+                    <dd>hoikone1108@gmail.com</dd>
+                  </dl>
+              </div>
+            </div>
+          </section>
+        </form>
+      </div>
+    </div>
+    <div class="col-md-4 col-lg-6 col-xl-7 d-flex">
+      <!-- Image-->
+      <div class="w-100 px-xxl-6 position-relative login_img_container">
+        <img class="login_img" src="{% static 'img/original/signup_img.png' %}">
+      </div>
+    </div>
+  </div>
+</div>
+<!-- JavaScript files-->
+<script>
+  // ------------------------------------------------------- //
+  //   Inject SVG Sprite - 
+  //   see more here 
+  //   https://css-tricks.com/ajaxing-svg-sprite/
+  // ------------------------------------------------------ //
+  function injectSvgSprite(path) {
+
+    var ajax = new XMLHttpRequest();
+    ajax.open("GET", path, true);
+    ajax.send();
+    ajax.onload = function (e) {
+      var div = document.createElement("div");
+      div.className = 'd-none';
+      div.innerHTML = ajax.responseText;
+      document.body.insertBefore(div, document.body.childNodes[0]);
+    }
+  }
+  // to avoid CORS issues when viewing using file:// protocol, using the demo URL for the SVG sprite
+  // use your own URL in production, please :)
+  // https://demo.bootstrapious.com/directory/1-0/icons/orion-svg-sprite.svg
+  //- injectSvgSprite('${path}icons/orion-svg-sprite.svg'); 
+  injectSvgSprite('https://demo.bootstrapious.com/directory/1-4/icons/orion-svg-sprite.svg'); 
+
+</script>
+{% endblock %}

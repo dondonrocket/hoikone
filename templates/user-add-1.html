@@ -1,0 +1,470 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <title>ホイコネ！-子どもが笑顔になる保育園検索サイト-</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="自分の子どもにピッタリの保育園を見つられる！新しい保育園検索サイトです。">
+  <meta name="robots" content="all,follow">
+  <!-- Price Slider Stylesheets -->
+  <link rel="stylesheet" href="{% static 'vendor/nouislider/nouislider.css' %}">
+  <!-- Google fonts - Playfair Display-->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700">
+  <!-- Google fonts - Poppins-->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,400i,700">
+  <!-- swiper-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/css/swiper.min.css">
+  <!-- Magnigic Popup-->
+  <link rel="stylesheet" href="{% static 'vendor/magnific-popup/magnific-popup.css' %}">
+  <!-- theme stylesheet-->
+  <link rel="stylesheet" href="{% static 'css/style.default.css' %}" id="theme-stylesheet">
+  <!-- Custom stylesheet - for your changes-->
+  <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+  <!-- Favicon-->
+  <link rel="shortcut icon" href="{% static 'img/original/favicon.ico' %}">
+  <!-- Tweaks for older IEs--><!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+  <!-- Font Awesome CSS-->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+    integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HLJQ4MP8N4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-HLJQ4MP8N4');
+</script>
+<!--<body style="padding-top: 72px;">-->
+<body>
+  <!--  <header class="header">-->
+  <header class="header header-link">
+    <!-- Navbar-->
+    <nav class="navbar navbar-expand-lg fixed-top shadow navbar-light bg-white">
+      <div class="container-fluid">
+        <div class="d-flex align-items-center"><a class="navbar-brand py-1" href="/"><img
+              src="{% static 'img/original/hoikone-logo.png' %}" alt="hoiconne logo"></a>
+
+          <form class="form-inline d-none d-sm-flex custom_form-margin" action="{% url 'hoikone:nursery-list' %}" method="get" id="search">
+            <div class="input-label-absolute input-label-absolute-left input-expand ms-lg-2 ms-xl-3">
+              <label class="label-absolute" for="search_search"><i class="fa fa-search"></i><span
+                  class="sr-only">場所やキーワードで検索</span></label>
+              <input class="form-control form-control-sm border-0 shadow-0 bg-gray-200" id="search_search"
+                placeholder="場所やキーワードで検索" aria-label="Search" type="search" name="query">
+            </div>
+          </form>
+
+        </div>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-bs-toggle="collapse"
+          data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false"
+          aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+          <form class="form-inline mt-4 mb-2 d-sm-none" action="{% url 'hoikone:nursery-list' %}" method="get" id="searchcollapsed">
+            <div class="input-label-absolute input-label-absolute-left w-100">
+              <label class="label-absolute" for="searchcollapsed_search"><i class="fa fa-search"></i><span
+                  class="sr-only">場所やキーワードで検索</span></label>
+              <input class="form-control form-control-sm border-0 shadow-0 bg-gray-200" id="searchcollapsed_search"
+                placeholder="場所やキーワードで検索" aria-label="Search" type="search" name="query">
+            </div>
+          </form>
+          <ul class="navbar-nav ms-auto">
+            {% if user.is_authenticated %}
+            <li class="nav-item custom_nav-item custom_nav-size">
+              こんにちは！{{ user.get_username }}さん
+            </li>
+            <li class="nav-item custom_nav-item custom_nav-size"><a class="nav-link" href="{% url 'contact-create' %}">お問い合わせ</a>
+            </li>  
+            <li class="nav-item custom_nav-item custom_nav-size">
+              <form action="{% url 'rest_framework:logout' %}" method="post" onsubmit="logout(event)">
+                {% csrf_token %}
+                <button class="btn btn-outline-primary" type="submit">ログアウト</button>
+              </form>
+            </li>
+            {% else %}
+            <li class="nav-item custom_nav-item"><a class="nav-link" href="{% url 'contact-create' %}">お問い合わせ</a>
+            </li>  
+            <li class="nav-item"><a class="nav-link" href="{% url 'hoikone:login' %}">サインイン</a></li>
+            <li class="nav-item custom_nav-item"><a class="btn btn-outline-primary"
+                href="{% url 'hoikone:signup' %}">保育園の登録はこちら</a></li>
+            {% endif %}
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- /Navbar -->
+  </header>
+<section class="py-5">
+  <div class="container">
+    <!-- メッセージを表示するテンプレート -->
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-success">{{ message }}</div>
+    {% endfor %}
+    {% endif %}
+    <h1 class="h2 hoikujouhou_color" style="letter-spacing: 0.1em;"> 保育園情報登録ページ</h1>
+    <p class="subtitle text-primary mb-5 custom_subtitle-size" style="font-size:15px; height: auto;">ここで入力した情報が保育園紹介ページに表示されます。<br>一度登録後に変更や追加で入力もできますので、お時間のある時に入力して下さい。<br>登録の際には当サイトの個人情報保護方針をお読みになり、同意の上登録してください。<br><br><span class="linemarker_pink">
+      ※画像をつけられる項目があります。より魅力的な保育園紹介ページができあがります。インターネット上に公開されることをご了承の上、ご利用下さい。<br>画像を選択しなかった場合は、当サイトで準備した画像が代わりに表示されます。</span></p> 
+    <form method="POST" action="{% url 'hoikone:create_nursery' %}" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="row form-block">
+        <div class="col-lg-4">
+          <h4 class="hoikujouhou_color">基本情報</h4>
+          <p class="text-muted text-sm">保育園の基本情報を入力してください。</p>
+          <img class="background_img" src="{% static 'img/original/user_add_kihon.png' %}">
+        </div>
+        <div class="col-lg-7 ms-auto">
+          <div class="mb-4">
+            <label class="form-label" for="form_name">保育園名<span class="error_color">*必須項目です。</span></label>
+            <input class="form-control" name="name" id="form_name" required>
+          </div>
+          <div class="mb-4">
+            <label class="form-label" for="form_type">保育園の種類</label>
+            <select class="selectpicker form-control" name="type" id="form_type" data-style="btn-selectpicker" title=""
+              aria-describedby="propertyTypeHelp">
+              <option value="認可保育園">認可保育園 </option>
+              <option value="認定こども園">認定こども園</option>
+              <option value="小規模保育所">小規模保育所 </option>
+              <option value="事業所内保育所">事業所内保育所 </option>
+              <option value="認証・認定（自治体認定保育園）">認証・認定（自治体認定保育園）</option>
+              <option value="その他">その他 </option>
+            </select>
+          </div>
+          <div class="mb-4">
+            <label class="form-label" for="form_name">住所</label>
+            <input class="form-control" name="address" id="form_name" placeholder="例：東京都狛江市×-×-×">
+          </div>
+          <div class="mb-4">
+            <label class="form-label" for="form_name">電話番号</label>
+            <input class="form-control" name="phone_number" id="form_name" placeholder="例：03-0000-0000" type="tel" pattern="\d{2,4}-?\d{2,4}-?\d{3,4}">
+          </div>
+          <div class="mb-4">
+            <label class="form-label" for="form_name">メールアドレス</label>
+            <input class="form-control" name="email" id="form_name" placeholder="例：×××@××.××.jp" type="email">
+          </div>
+        </div>
+      </div>
+      <div class="row form-block">
+        <div class="col-lg-4">
+          <h4 class="hoikujouhou_color">保育園紹介</h4>
+          <p class="text-muted text-sm">
+            保育園紹介ページのメインになる部分です。あなたの保育園の魅力を教えて下さい。</p>
+            <img class="background_img" src="{% static 'img/original/user_add_tokushoku.png' %}">
+        </div>
+        <div class="col-lg-7 ms-auto">
+          <!-- 特色-->
+          <div class="mb-5">
+            <label class="form-label linemarker" for="form_name">あなたの保育園の特色を一文に要約して下さい。(40文字以内)</label>
+            <textarea class="form-control" name="feature" id="form_description" rows="5"
+              aria-describedby="descriptionHelp" maxlength="40"></textarea><small class="form-text text-muted mt-2 custom_form-text"
+              id="descriptionHelp">検索のキーワードはこの特色の項目でヒットします。例：「異年齢保育の中で、慕い慕われることによって人間性を育みます。」この例では、「異年齢保育」というキーワードが検索で引っかかるようになります。</small>
+          </div>
+          <!-- 画像アップロード-->
+          <div class="mb-4">
+            <label class="form-label"
+              for="form_feature_image"><span class="linemarker">保育園の特色を表現している画像を選択して下さい。</span><br>（※ここで選択した画像は下の登録ボタンを押した後、サーバーにアップロードされます。）</label>
+            <input type="file" class="form-control" name="feature_image" id="form_feature_image" accept="image/*">
+            <!-- 表示される画像の部分 -->
+            <img class="preview_size" id="feature_image_preview" src="">
+          </div>
+          <!--特色をいかすためにどのように保育をしているか-->
+          <div class="mb-5">
+            <label class="form-label linemarker" for="form_city">特色を表している保育内容を教えて下さい。</label>
+            <textarea class="form-control" name="description" id="form_description" rows="5"
+              aria-describedby="descriptionHelp"></textarea><small class="form-text text-muted mt-2 custom_form-text"
+              id="descriptionHelp">入力して頂いた特色を表す具体的なエピソードを交えると分かりやすくなります。</small>
+          </div>
+          <!--子どもたちにどのように育ってもらいたいか-->
+          <div class="mb-5">
+            <label class="form-label linemarker" for="form_state">子どもと接する時に何を大事にしていますか？</label>
+            <textarea class="form-control" name="future" id="form_description" rows="5"
+              aria-describedby="descriptionHelp"></textarea><small class="form-text text-muted mt-2 custom_form-text"
+              id="descriptionHelp">実際に保育士が子どもとどのように関わっているか。その関わりを経てどのような大人になって欲しいかを入力することで、読者が理解しやすくなります。</small>
+          </div>
+          <!--あなたの保育園で子どもが体験できる経験を1つ教えてください。-->
+          <div class="mb-5">
+            <label class="form-label linemarker" for="form_state">あなたの保育園で子どもが体験できることを1つ教えてください。</label>
+            <textarea class="form-control" name="experience" id="form_description" rows="5"
+              aria-describedby="descriptionHelp"></textarea><small class="form-text text-muted mt-2 custom_form-text"
+              id="descriptionHelp">保育園での具体的なエピソードを交えて入力してもらうと、子どもが入園した後にどのような体験を園ですることができるのか想像することができます。</small>
+          </div>
+          <!--子どもが体験できる経験の画像-->
+          <div class="mb-4">
+            <label class="form-label"
+              for="form_experience_image"><span class="linemarker">子どもが体験している画像を選択して下さい。</span><br>（※ここで選択した画像は下の登録ボタンを押した後、サーバーにアップロードされます。）</label>
+            <input type="file" class="form-control" name="experience_image" id="form_experience_image" accept="image/*">
+            <!-- 表示される画像の部分 -->
+            <img class="preview_size" id="experience_image_preview" src="">
+          </div>
+        </div>
+      </div>
+      <div class="row form-block" style="border-bottom: none;">
+        <div class="col-lg-4">
+          <h4 class="hoikujouhou_color">詳細情報</h4>
+          <p class="text-muted text-sm">保育園についての詳細情報を入力して下さい。</p>
+          <img class="background_img" src="{% static 'img/original/user_add_shousai.png' %}">
+        </div>
+        <!--定員数-->
+        <!--        <div class="col-md-6">-->
+        <div class="col-lg-7 ms-auto">
+          <div class="row">
+            <div class="col-lg-4">
+              <label class="form-label">定員数…0歳</label>
+              <div class="d-flex align-items-center">
+                <div class="btn btn-items btn-items-decrease">-</div>
+                <input class="form-control input-items" type="number" value="0" name="capacity_0">
+                <div class="btn btn-items btn-items-increase">+</div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <label class="form-label">定員数…1歳</label>
+              <div class="d-flex align-items-center">
+                <div class="btn btn-items btn-items-decrease">-</div>
+                <input class="form-control input-items" type="number" value="0" name="capacity_1">
+                <div class="btn btn-items btn-items-increase">+</div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <label class="form-label">定員数…2歳</label>
+              <div class="d-flex align-items-center">
+                <div class="btn btn-items btn-items-decrease">-</div>
+                <input class="form-control input-items" type="number" value="0" name="capacity_2">
+                <div class="btn btn-items btn-items-increase">+</div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-lg-4">
+              <label class="form-label">定員数…3歳</label>
+              <div class="d-flex align-items-center">
+                <div class="btn btn-items btn-items-decrease">-</div>
+                <input class="form-control input-items" type="number" value="0" name="capacity_3">
+                <div class="btn btn-items btn-items-increase">+</div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <label class="form-label">定員数…4歳</label>
+              <div class="d-flex align-items-center">
+                <div class="btn btn-items btn-items-decrease">-</div>
+                <input class="form-control input-items" type="number" value="0" name="capacity_4">
+                <div class="btn btn-items btn-items-increase">+</div>
+              </div>
+            </div>
+            <div class="col-lg-4">
+              <label class="form-label">定員数…5歳</label>
+              <div class="d-flex align-items-center">
+                <div class="btn btn-items btn-items-decrease">-</div>
+                <input class="form-control input-items" type="number" value="0" name="capacity_5">
+                <div class="btn btn-items btn-items-increase">+</div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-4" style="margin-top:50px">
+            <!--園庭-->
+            <div class="mb-4">
+              <p class="form-label"><span class="linemarker">園庭はありますか？</span></p>
+              <input type="radio" id="form_name" name="playground" value="ある" />
+              <label for="form_name" style="margin-right: 100px;">ある</label>
+              <input type="radio" id="form_name" name="playground" value="ない" />
+              <label for="form_name">ない</label>
+            </div>
+            <!--開所時間-->
+            <div class="mb-4">
+              <label class="form-label linemarker" for="form_name">開所時間は何時から何時までですか？</label>
+              <input class="form-control" name="open_hours" id="form_name" placeholder="例：7時15分～20時15分">
+            </div>
+            <!--延長保育の時間-->
+            <div class="mb-4">
+              <label class="form-label linemarker" for="form_name">延長保育はありますか？何時から何時までですか？</label>
+              <input class="form-control" name="extension_time" id="form_name" placeholder="例：18時15分～20時15分">
+              <small class="form-text text-muted mt-2" id="descriptionHelp">延長保育が無い場合は無しと入力してください。</small>
+            </div>
+            <!--休園日-->
+            <div class="mb-4">
+              <label class="form-label linemarker" for="form_name">休園日を教えて下さい。</label>
+              <input class="form-control" name="holidays" id="form_name" placeholder="例：日曜日、祝日">
+            </div>
+            <!--url-->
+            <div class="mb-4">
+              <label class="form-label linemarker" for="form_name">ホームページのurlを教えて下さい。</label>
+              <input class="form-control" name="url" id="form_name" placeholder="例：http://www.hoikuen.com">
+            </div>
+            <!--園の画像-->
+            <div class="mb-4">
+              <label class="form-label"
+                for="form_image"><span class="linemarker">園舎の画像を選択して下さい。</span><br>（※ここで選択した画像は下の登録ボタンを押した後、サーバーにアップロードされます。）</label>
+              <input type="file" class="form-control" name="image" id="form_image" accept="image/*">
+              <img class="preview_size" id="image_preview" src="">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center">
+        <p class="linemarker">おつかれさまでした！</p>
+      </div>
+      <div class="consent-txt text-center">
+        <input type="checkbox" id="check" name="agreement" required="">
+        <label for="check">当サイトの<a href="#pp">個人情報保護方針</a>に同意する</label><br>
+        ※同意いただけない場合は送信ができません。
+      </div>
+      <div class="row form-block flex-column flex-sm-row">
+        <div class="col text-center">
+          <input type="submit" value="登録する" class="btn btn-primary px-3">
+        </div>
+      </div>
+    </form>
+  </div>
+</section>
+<section id="pp" style="background-color: rgb(228, 241, 220); padding-top: 50px;">
+  <div class="container">
+    <h3 class="pp-ttl">個人情報保護方針</h3>
+    <div class="pp-body">
+        <p>
+          当サイトの運営に際し、利用者のプライバシーを尊重し個人情報に対して十分な配慮を行うとともに、<br>
+          大切に保護し、適正な管理を行うことに努めております。
+        </p>
+        <dl>
+          <dt>【個人情報の利用目的】</dt>
+          <dd>
+            a）利用者のご要望に合わせたサービスを提供するためのご連絡。<br>
+            b）お問い合わせいただいたご質問への回答のご連絡。<br>
+            c）保育園情報の表示。
+          </dd>
+        </dl>
+        <ul>
+          <li>・公正かつ適正な手段で、上記目的に必要となる個人情報を収集します。</li>
+          <li>・要配慮個人情報を取得する際は、ご本人の同意を得るものとします。</li>
+          <li>・取得した個人情報・要配慮個人情報は、ご本人の同意なしに目的以外では利用しません。</li>
+          <li>・情報が漏洩しないよう対策を講じます。</li>
+          <li>・国内外を問わず、ご本人の同意を得ずに第三者に情報を提供しません。</li>
+          <li>・ご本人からの求めに応じ情報を開示します。</li>
+          <li>・公開された個人情報が事実と異なる場合、訂正や削除に応じます。</li>
+          <li>・個人情報の取り扱いに関する苦情に対し、適切・迅速に対処します。</li>
+          <li>・本個人情報保護方針の適用範囲は本サイト内のみとします。</li>
+        </ul>
+        <dl>
+            <dt>【Googleアナリティクスの使用について】</dt>
+            <dd>
+              当サイトでは、より良いサービスの提供、またユーザビリティの向上のため、Googleアナリティクスを使用し、当サイトの利用状況などのデータ収集及び解析を行っております。その際、「Cookie」を通じて、Googleがお客様のIPアドレスなどの情報を収集する場合がありますが、「Cookie」で収集される情報は個人を特定できるものではありません。<br>
+              収集されたデータはGoogleのプライバシーポリシーにおいて管理されます。<br>
+              なお、当サイトのご利用をもって、上述の方法・目的においてGoogle及び当サイトが行うデータ処理に関し、お客様にご承諾いただいたものとみなします。
+            </dd>
+        </dl>
+        <dl>
+          <dt>■Googleのプライバシーポリシー</dt>
+          <dd>
+            <a href="http://www.google.com/intl/ja/policies/privacy/" target="_blank">http://www.google.com/intl/ja/policies/privacy/</a><br>
+            <a href="https://www.google.com/intl/ja/policies/privacy/partners/" target="_blank">https://www.google.com/intl/ja/policies/privacy/partners/</a>
+          </dd>
+        </dl>
+        <dl>
+          <dt>【著作権・肖像権】</dt>
+          <dd>当Webサイト内の文章や画像、すべてのコンテンツは著作権・肖像権等により保護されています。無断での使用や転用は禁止されています。</dd>
+        </dl>
+        <dl>
+          <dt>【当サイトへのリンクについて】</dt>
+          <dd>当Webサイトへのリンクは、自由に設置していただいて構いません。ただし、Webサイトの内容等によってはリンクの設置をお断りすることがあります。</dd>
+        </dl>
+        <dl>
+          <dt>【免責事項について】</dt>
+          <dd>当webサイトのコンテンツ・情報について、可能な限り正確な情報を掲載するよう努めておりますが、正確性や安全性を保証するものではありません。当webサイトに掲載された内容によって生じた損害等の一切の責任を負いかねますのでご了承ください。<br>
+          当サイトからリンクやバナーなどによって他のサイトに移動した場合、移動先サイトで提供される情報、サービス等について一切の責任を負いません。、</dd>
+        </dl>
+        <dl>
+          <dt>【個人情報に関するお問い合わせ先】</dt>
+          <dd><a href="mailto:hoikone1108@gmail.com">hoikone1108@gmail.com</a></dd>
+        </dl>
+        <dl style="padding-bottom: 50px;">
+          <dt>【プライバシーポリシーの制定日】</dt>
+          <dd>制定：2023年8月26日</dd>
+        </dl>
+    </div>
+  </div>
+</section>
+<!-- Footer-->
+<footer class="position-relative z-index-10 d-print-none">
+  <!-- Main block - menus, subscribe form-->
+  <div class="py-6 bg-gray-200 text-muted custom_bg custom_py-6_2">
+    <div class="container">
+      <div class="row">
+        <div class="mb-5 mb-lg-0">
+          <ul class="list-inline custom_ul">
+            <li class="list-inline-item custom_inline-item"><a class="text-muted text-primary-hover" href="#" target="_blank"
+                title="twitter"><i class="fab fa-twitter faa-wrench animated fa-3x"></i></a></li>
+            <li class="list-inline-item custom_inline-item"><a class="text-muted text-primary-hover" href="#" target="_blank"
+                title="facebook"><i class="fab fa-facebook faa-shake animated fa-3x"></i></a></li>
+          </ul>
+          <p class="text-center" style="padding-top: 50px;"><a class="text-muted text-primary-hover privacypolicy" href="{% url 'privacypolicy' %}">プライバシーポリシー</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Copyright section of the footer-->
+  <div class="py-4 fw-light bg-gray-800 text-gray-300 custom_copyright_section">
+    <div class="container">
+      <div class="align-items-center">
+        <div class="text-center">
+          <p class="text-sm mb-md-0 custom_copyright_text">&copy; 2023, ホイコネ！. All rights reserved.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+  <!-- JavaScript files-->
+  <script>
+    // ------------------------------------------------------- //
+    //   Inject SVG Sprite - 
+    //   see more here 
+    //   https://css-tricks.com/ajaxing-svg-sprite/
+    // ------------------------------------------------------ //
+    function injectSvgSprite(path) {
+
+      var ajax = new XMLHttpRequest();
+      ajax.open("GET", path, true);
+      ajax.send();
+      ajax.onload = function (e) {
+        var div = document.createElement("div");
+        div.className = 'd-none';
+        div.innerHTML = ajax.responseText;
+        document.body.insertBefore(div, document.body.childNodes[0]);
+      }
+    }
+    // to avoid CORS issues when viewing using file:// protocol, using the demo URL for the SVG sprite
+    // use your own URL in production, please :)
+    // https://demo.bootstrapious.com/directory/1-0/icons/orion-svg-sprite.svg
+    //- injectSvgSprite('${path}icons/orion-svg-sprite.svg'); 
+    injectSvgSprite('https://demo.bootstrapious.com/directory/1-4/icons/orion-svg-sprite.svg');
+
+  </script>
+
+  <!-- jQuery-->
+  <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+  <!-- Bootstrap JS bundle - Bootstrap + PopperJS-->
+  <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+  <!-- Magnific Popup - Lightbox for the gallery-->
+  <script src="{% static 'vendor/magnific-popup/jquery.magnific-popup.min.js' %}"></script>
+  <!-- Smooth scroll-->
+  <script src="{% static 'vendor/smooth-scroll/smooth-scroll.polyfills.min.js' %}"></script>
+  <!-- Bootstrap Select-->
+  <script src="{% static 'vendor/bootstrap-select/js/bootstrap-select.min.js' %}"></script>
+  <!-- Object Fit Images - Fallback for browsers that don't support object-fit-->
+  <script src="{% static 'vendor/object-fit-images/ofi.min.js' %}"></script>
+  <!-- Swiper Carousel                       -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.4.1/js/swiper.min.js"></script>
+  <script>var basePath = ''</script>
+  <!-- Axios-->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <!-- Main Theme JS file    -->
+  <script src="{% static 'js/theme.js' %}"></script>
+
+</body>
+
+</html>
